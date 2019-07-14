@@ -172,7 +172,7 @@
 #define A_CONFIG1 0x7C
 #define USL 0x7D
 #define LSL 0x7E
-#define TL 0x7D
+#define TL 0x7F
 
 // soft reset
 #define SRST 0x80
@@ -183,25 +183,46 @@
 #define SLA_W (MPR121_ADD & 0xFE)
 
 #define TIMEOUT 50
-#define ACK 
+#define ACK 1
+#define NACK 0
 
-uint8_t mpr121_send_touch(void);
-void mpr121_autoconf(void);
-uint8_t mpr121_read(uint8_t add);
-void mpr121_write(uint8_t add);
-uint16_t mpr121_nirq(void);
 void mpr121_init(void);
 void mpr121_reset(void);
 void mpr121_stopMode(void);
-void mpr121_runMode( void )
+void mpr121_runMode(void);
+uint16_t mpr121_nirq(void);
+
+uint8_t mpr121_read(uint8_t add);
+uint16_t mpr121_read2(uint8_t add);
+void mpr121_write(uint8_t add, uint8_t data);
+
+uint8_t mpr121_touch(void);
+uint16_t mpr121_filteredData(uint8_t t);
+uint16_t mpr121_baselineData(uint8_t t);
+
+void mpr121_setThresholds(uint8_t touch, uint8_t release);
+void mpr121_set_MHD(uint8_t rising, uint8_t falling);
+void mpr121_set_NHD(uint8_t rising, uint8_t falling, uint8_t touched);
+void mpr121_set_NCL(uint8_t rising, uint8_t falling, uint8_t touched);
+void mpr121_set_FDL(uint8_t rising, uint8_t falling, uint8_t touched);
+void mpr121_set_CDC(uint8_t cdc);
+void mpr121_set_CDT(uint8_t cdt);  
+void mpr121_set_FFI(uint8_t ffi);
+void mpr121_set_ESI(uint8_t esi);
+void mpr121_set_SFI(uint8_t sfi);
+void mpr121_setDebounces(uint8_t touch, uint8_t release);
+void mpr121_setRising(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
+void mpr121_setFalling(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
+void mpr121_setTouched(uint8_t nhd, uint8_t ncl, uint8_t fdl);
 
 uint8_t mpr121_init(void){
 #ifndef I2C_INIT
 	i2c_init();
+	#define I2C_INIT
 #endif
 	mpr121_write(SRST,0x63);
 	i2c_wait(TIMEOUT);
-	uint8_t c = mpr121_read(MPR121_CONFIG2); 
+	uint8_t c = mpr121_read(CDT_GLOBAL); 
 	if (c != 0x24) return 0;
 	mpr121_reset();
 	return 1;
@@ -216,6 +237,23 @@ uint8_t mpr121_read(uint8_t add){
 	i2c_rx_data(1);
 	data = i2c_get_data();
 	i2c_wait(TIMEOUT);
+	i2c_nack();
+	i2c_stop();
+	return (data);
+}
+
+uint16_t mpr121_read2(uint8_t add){
+	i2c_start();
+	i2c_tx_data(SLA_W);
+	i2c_tx_data(add);
+	i2c_start();
+	i2c_tx_data(SLA_R);
+	i2c_rx_data(1);
+	data = i2c_get_data();
+	i2c_wait(TIMEOUT);
+	i2c_rx_data(0);
+	data |= ((i2c_get_data() & 0x1F) << 8);
+	i2c_nack();
 	i2c_stop();
 	return (data);
 }
@@ -230,8 +268,7 @@ void mpr121_write(uint8_t add, uint8_t data){
 
 uint16_t mpr121_touch(void){
 	uint16_t status;
-	status = mpr121_read(TOUCH_STATUS0);
-	status |= ((mpr121_read(TOUCH_STATUS1) & 0x1F) << 8);
+	status = mpr121_read2(TOUCH_STATUS0);
 	return status;
 }
 
@@ -263,92 +300,84 @@ void mpr121_reset(void){
 	mpr121_write(FDLT, 0x00); //
   
 	mpr121_write(DEBOUNCE_T_R, 0x11); 	// (EFI x SFI x 2 (ms) delay)
-/* TODO ---> da commentare */  
-	mpr121_write(MPR121_AUTOCONFIG0, 0x9F);  // FFI (must match FFI in 0x5C) | RETRY enabled (2 times) | BVA (must match CL in 0x5E) | ARE enabled| ACE enabled
-	mpr121_write(MPR121_CONFIG1, 0x90); 		// FFI must match FFI in 0x7B
+	mpr121_write(A_CONFIG0, 0x9F);  // FFI (must match FFI in 0x5C) | RETRY enabled (2 times) | BVA (must match CL in 0x5E) | ARE enabled| ACE enabled
+	mpr121_write(CDC_GLOBAL, 0x90); 		// FFI must match FFI in 0x7B
   
-	mpr121_write(MPR121_CONFIG2, 0x20); 		// 0.5uS encoding, 1ms period
+	mpr121_write(CDT_GLOBAL, 0x20); 		// 0.5uS encoding, 1ms period
   
-	mpr121_write(MPR121_UPLIMIT, 156);
-	mpr121_write(MPR121_TARGETLIMIT, 140); // should correspond to ~562 ADC
-	mpr121_write(MPR121_LOWLIMIT, 101);
+	mpr121_write(USL, 156);
+	mpr121_write(TL, 140); // should correspond to ~562 ADC
+	mpr121_write(LSL, 101);
   
 	// preliminary setting for thresholds
 	for (uint8_t i=0; i<12; i++) {
-		mpr121_write(MPR121_TOUCHTH_0 + 2*i, 150);
-		mpr121_write(MPR121_RELEASETH_0 + 2*i, 50);
+		mpr121_write(E0TTH + 2*i, 150);
+		mpr121_write(E0RTH + 2*i, 50);
   	}
 	_delay_ms(5);
 	runMode();	
 }
 
-void mpr121_stopMode( void )
-{
+void mpr121_stopMode( void ){
 	mpr121_write(ECR, 0xC0); // baseline tracking attiva (10 bit) + 0 elettrodi attivi
 }
 
-void mpr121_runMode( void )
-{
+void mpr121_runMode( void ){
 	mpr121_write(ECR, 0xCF); // baseline tracking attiva (10 bit) + 12 elettrodi attivi
 }
 
 
-void mpr121_set_FFI(uint8_t ffi)
-{
+void mpr121_set_FFI(uint8_t ffi){
 	uint8_t _ffi = (ffi & 0x03);
-	uint8_t cdc = mpr121_read( MPR121_CONFIG1 );
+	uint8_t cdc = mpr121_read( CDC_GLOBAL );
 	cdc = cdc & 0x3F;
 	
 	stopMode();
-	mpr121_write(MPR121_CONFIG1, _ffi | cdc );
+	mpr121_write(CDC_GLOBAL, _ffi | cdc );
 	runMode();
 }
 
-void mpr121_set_ESI(uint8_t esi)
-{
+void mpr121_set_ESI(uint8_t esi){
 	uint8_t _esi = esi & 0x07;
 	_esi = _esi << 0;
-	uint8_t cdt_sfi = mpr121_read( MPR121_CONFIG2 );
+	uint8_t cdt_sfi = mpr121_read( CDT_GLOBAL );
 	cdt_sfi = cdt_sfi & 0xF8;
 	
 	stopMode();
-	mpr121_write(MPR121_CONFIG2, cdt_sfi | _esi );
+	mpr121_write(CDT_GLOBAL, cdt_sfi | _esi );
 	runMode();
 }
 
-void mpr121_set_SFI(uint8_t sfi)
-{
+void mpr121_set_SFI(uint8_t sfi){
 	uint8_t _sfi = sfi & 0x03;
 	_sfi = _sfi << 3;
-	uint8_t cdt_esi = mpr121_read( MPR121_CONFIG2 );
+	uint8_t cdt_esi = mpr121_read( CDT_GLOBAL );
 	cdt_esi = cdt_esi & 0xE7;
 	
 	stopMode();
-	mpr121_write(MPR121_CONFIG2, cdt_esi | _sfi );
+	mpr121_write(CDT_GLOBAL, cdt_esi | _sfi );
 	runMode();
 }
 
-void mpr121_set_CDC(uint8_t cdc)
-{
+void mpr121_set_CDC(uint8_t cdc){
 	uint8_t _cdc = cdc & 0x3F;
 	_cdc = _cdc << 0;
-	uint8_t ffi = mpr121_read( MPR121_CONFIG1 );
+	uint8_t ffi = mpr121_read( CDC_GLOBAL );
 	ffi = ffi & 0xC0;
 	
 	stopMode();
-	mpr121_write(MPR121_CONFIG1, ffi | _cdc );
+	mpr121_write(CDC_GLOBAL, ffi | _cdc );
 	runMode();
 }
 
-void mpr121_set_CDT(uint8_t cdt)
-{
+void mpr121_set_CDT(uint8_t cdt){
 	uint8_t _cdt = cdt & 0x07;
 	_cdt = _cdt << 5;
-	uint8_t sfi_esi = mpr121_read( MPR121_CONFIG2 );
+	uint8_t sfi_esi = mpr121_read( CDT_GLOBAL );
 	sfi_esi = sfi_esi & 0x1F;
 	
 	stopMode();
-	mpr121_write(MPR121_CONFIG2, sfi_esi | _cdt );
+	mpr121_write(CDT_GLOBAL, sfi_esi | _cdt );
 	runMode();
 }
 
@@ -365,7 +394,7 @@ void mpr121_set_debounces(uint8_t touch, uint8_t release)
 	_release = _release << 4;
 	
 	stopMode();
-	mpr121_write( MPR121_DEBOUNCE, (_release | _touch) );
+	mpr121_write( DEBOUNCE_T_R, (_release | _touch) );
 	runMode();
 	
 } 
@@ -454,47 +483,23 @@ void mpr121_set_FDL(uint8_t rising, uint8_t falling, uint8_t touched)
 void mpr121_set_thresholds(uint8_t touch, uint8_t release) {
   stopMode();
   for (uint8_t i=0; i<12; i++) {
-    mpr121_write(MPR121_TOUCHTH_0 + 2*i, touch);
-    mpr121_write(MPR121_RELEASETH_0 + 2*i, release);
+    mpr121_write(ETTH0 + 2*i, touch);
+    mpr121_write(ERTH0 + 2*i, release);
   }
   runMode();  
 }
 
 
-uint16_t  mpr121_filteredData(uint8_t t) {
-  if (t > 12) return 0;
-  return readRegister16(MPR121_FILTDATA_0L + t*2);
+uint16_t  mpr121_filteredData(uint8_t ele) {
+  if (ele > 12) return 0;
+  return (mpr121_read2(E0_DATA_LB + ele*2));
 }
 
-uint16_t  mpr121_baselineData(uint8_t t) {
-  if (t > 12) return 0;
-  uint16_t bl = mpr121_read(MPR121_BASELINE_0 + t);
-  return (bl << 2);
+uint16_t  mpr121_baselineData(uint8_t ele) {
+  if (ele > 12) return 0;
+  return (mpr121_read(E0BV + ele) << 2);
 }
 
-uint16_t  Limulo_MPR121::touched(void) {
-  uint16_t t = readRegister16(MPR121_TOUCHSTATUS_L);
-  return t & 0x0FFF;
-}
-
-// print CDC / CDT
-// print CDC and CDT in a more readable way
-void mpr121_printCDC( void )
-{
-	uint8_t cdc = mpr121_read( MPR121_CONFIG1 ) & 0x3F;
-	Serial.print("CDC: ");
-	Serial.print( cdc, DEC);
-	Serial.println(" uA;");
-}
-
-
-void mpr121_printCDT( void )
-{
-	uint8_t cdt = mpr121_read( MPR121_CONFIG2 ) & 0xE0;
-	cdt = cdt >> 5;
-	signed int exp = cdt - 2;
-	float time = (float) pow( 2, exp );
-	Serial.print("CDT: ");
-	Serial.print( time, DEC);
-	Serial.println(" uS;");
+uint16_t  mpr121_touched(void) {
+  return ( read2(TOUCHSTATUS0) & 0x0FFF);
 }

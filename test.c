@@ -17,9 +17,10 @@ int main(void){
 	print_String("\r\n --- MPR121 test --\r\n");
 	i2c_init();
 	mpr121_init();
+	mpr121_reset();
 
 	while(1){
-		...
+		
 	}
 	return 0;
 }

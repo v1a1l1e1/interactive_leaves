@@ -15,6 +15,8 @@ void i2c_stop(uint8_t addr);
 uint8_t i2c_tx_data (uint8_t data);
 uint8_t i2c_rx_data(uint8_t ack);
 uint8_t i2c_get_data(void);
+void i2c_ack(void);
+void i2c_nack(void);
 void i2c_wait(uint8_t timeout);
 
 void i2c_init(void){
@@ -29,6 +31,7 @@ void i2c_init(void){
 	TWBR = TWBR_V; // 
 	TWSR &= (~(1<<TWPS0) | ~(1 << TWPS1)); // prescaler = 1
 	TWCR |= (1 << TWEN);
+	#define I2C_INIT
 }
 
 void i2c_start(void){
@@ -72,4 +75,12 @@ uint8_t i2c_get_data(void){
 void i2c_wait(uint8_t timeout){
 	while ( ((TWCR & (1 << TWINT)) == 0)) && (i < timeout)
 		++i;
+}
+
+void i2c_ack(void){
+	TWCR |= (1<<TWEA);
+}
+
+void i2c_nack(void){
+	TWCR &= ~(1<<TWEA);
 }
