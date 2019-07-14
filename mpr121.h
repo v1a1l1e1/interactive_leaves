@@ -379,9 +379,9 @@ void mpr121_rising_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl)
 	uint8_t _nhd = nhd & 0x3F;
 	
 	stopMode();
-  	mpr121_write(MPR121_MHDR, _mhd); 	// maximum half-delta (0 - 63) 
-  	mpr121_write(MPR121_NHDR, _nhd);	// noise half-delta (0 - 63)
-  	mpr121_write(MPR121_NCLR, ncl);	// noise count limit
+  	mpr121_write(MHDR, _mhd); 	// maximum half-delta (0 - 63) 
+  	mpr121_write(NHDR, _nhd);	// noise half-delta (0 - 63)
+  	mpr121_write(NCLR, ncl);	// noise count limit
   	mpr121_write(MPR121_FDLR, fdl);	// filter delay count
 	runMode();	
 }
@@ -395,10 +395,10 @@ void mpr121_falling_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl
 	uint8_t _nhd = nhd & 0x3F;
 	
 	stopMode();
-  	mpr121_write(MPR121_MHDF, _mhd); 	// maximum half-delta (0 - 63) 
-  	mpr121_write(MPR121_NHDF, _nhd);	// noise half-delta (0 - 63)
-  	mpr121_write(MPR121_NCLF, ncl);	// noise count limit
-  	mpr121_write(MPR121_FDLF, fdl);	// filter delay count
+  	mpr121_write(MHDF, _mhd); 	// maximum half-delta (0 - 63) 
+  	mpr121_write(NHDF, _nhd);	// noise half-delta (0 - 63)
+  	mpr121_write(NCLF, ncl);	// noise count limit
+  	mpr121_write(FDLF, fdl);	// filter delay count
 	runMode();	
 }
 
@@ -410,44 +410,44 @@ void mpr121_set_touched(uint8_t nhd, uint8_t ncl, uint8_t fdl)
 	uint8_t _nhd = nhd & 0x3F;
 	
 	stopMode();
-  	mpr121_write(MPR121_NHDT, _nhd);	// noise half-delta (0 - 63)
-  	mpr121_write(MPR121_NCLT, ncl);	// noise count limit
-  	mpr121_write(MPR121_FDLT, fdl);	// filter delay count
+  	mpr121_write(NHDT, _nhd);	// noise half-delta (0 - 63)
+  	mpr121_write(NCLT, ncl);	// noise count limit
+  	mpr121_write(FDLT, fdl);	// filter delay count
 	runMode();	
 }
 
 void mpr121_set_MHD(uint8_t rising, uint8_t falling) 
 {
 	stopMode();
-  	mpr121_write(MPR121_MHDR, rising); 
-  	mpr121_write(MPR121_MHDF, falling);
+  	mpr121_write(MHDR, rising); 
+  	mpr121_write(MHDF, falling);
 	runMode();
 }
 
 void mpr121_set_NHD(uint8_t rising, uint8_t falling, uint8_t touched) 
 {
 	stopMode();
-  	mpr121_write(MPR121_NHDR, rising); 
-  	mpr121_write(MPR121_NHDF, falling); 
-  	mpr121_write(MPR121_NHDT, touched); 
+  	mpr121_write(NHDR, rising); 
+  	mpr121_write(NHDF, falling); 
+  	mpr121_write(NHDT, touched); 
 	runMode();
 }
 
 void mpr121_set_NCL(uint8_t rising, uint8_t falling, uint8_t touched) 
 {
 	stopMode();
-  	mpr121_write(MPR121_NCLR, rising); 
-  	mpr121_write(MPR121_NCLF, falling); 
-  	mpr121_write(MPR121_NCLT, touched); 
+  	mpr121_write(NCLR, rising); 
+  	mpr121_write(NCLF, falling); 
+  	mpr121_write(NCLT, touched); 
 	runMode();
 }
 
 void mpr121_set_FDL(uint8_t rising, uint8_t falling, uint8_t touched) 
 {
 	stopMode();
-  	mpr121_write(MPR121_FDLR, rising); 
-  	mpr121_write(MPR121_FDLF, falling); 
-  	mpr121_write(MPR121_FDLT, touched); 
+  	mpr121_write(FDLR, rising); 
+  	mpr121_write(FDLF, falling); 
+  	mpr121_write(FDLT, touched); 
 	runMode();
 }
 
