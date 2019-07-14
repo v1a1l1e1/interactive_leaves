@@ -186,7 +186,7 @@
 #define ACK 1
 #define NACK 0
 
-void mpr121_init(void);
+uint8_t mpr121_init(void);
 void mpr121_reset(void);
 void mpr121_stopMode(void);
 void mpr121_runMode(void);
@@ -210,10 +210,10 @@ void mpr121_set_CDT(uint8_t cdt);
 void mpr121_set_FFI(uint8_t ffi);
 void mpr121_set_ESI(uint8_t esi);
 void mpr121_set_SFI(uint8_t sfi);
-void mpr121_setDebounces(uint8_t touch, uint8_t release);
-void mpr121_setRising(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
-void mpr121_setFalling(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
-void mpr121_setTouched(uint8_t nhd, uint8_t ncl, uint8_t fdl);
+void mpr121_set_debounces(uint8_t touch, uint8_t release);
+void mpr121_rising_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
+void mpr121_falling_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
+void mpr121_set_touched(uint8_t nhd, uint8_t ncl, uint8_t fdl);
 
 uint8_t mpr121_init(void){
 #ifndef I2C_INIT
