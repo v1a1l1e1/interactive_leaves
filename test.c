@@ -1,7 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/power.h>
-#include <util/twi.h>
 #include <avr/interrupt.h>
 #include "usart.h"
 #include "i2c.h"
@@ -20,7 +19,7 @@ PORTB &= ~(1 << PBO);
 
 void init_interrupt(void){
 	EIMSK |= (1<<INT0);
-	EICRA |= (
+	EICRA &= ~((1 << ISC00) | (1 << ISC00))
 }
 
 int main(void){
