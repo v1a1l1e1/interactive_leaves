@@ -14,8 +14,8 @@
 void i2c_init(void);
 void i2c_start(void);
 void i2c_stop(uint8_t addr);
-void i2c_tx_data (uint8_t data);
-void i2c_rx_data(uint8_t ack);
+uint8_t i2c_tx_data (uint8_t data);
+uint8_t i2c_rx_data(uint8_t ack);
 uint8_t i2c_get_data(void);
 uint8_t i2c_get_status(void);
 
@@ -51,13 +51,22 @@ void i2c_tx_data(uint8_t data){
 	SDA_W();
 	TWDR = data;
 	TWCR = (1 << TWINT) | (1 << TWEN);
+	while ((TWCR & (1 << TWINT)) == 0) 
+			;
 }
 
-void i2c_rx_data (uint8_t ack){
-	if (ack)
-		TWCR = (TWCR & 0x0f) | (1 << TWINT) | (1 << TWEA));
-	else
-		TWCR = (TWCR & 0x0f) | (1 << TWINT)
+uint8_t i2c_rx_data (uint8_t ack){
+	if (ack){
+		TWCR = (TWCR & 0x0f) | (1 << TWINT) | (1 << TWEN) | (1 << TWEA));
+		while ((TWCR & (1 << TWINT)) == 0) 
+			;
+	}
+	else {
+		TWCR = (TWCR & 0x0f) | (1 << TWINT) | (1 << TWEN);
+		while ((TWCR & (1 << TWINT)) == 0) 
+			;
+	}
+	return (i2c_get_data());
 }
 
 uint8_t i2c_get_data(void){
@@ -67,6 +76,3 @@ uint8_t i2c_get_data(void){
 uint8_t i2c_get_status(void){
 	return TWSR;
 }
-
-
-	
