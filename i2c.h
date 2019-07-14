@@ -74,5 +74,5 @@ uint8_t i2c_get_data(void){
 }
 
 uint8_t i2c_get_status(void){
-	return TWSR;
+	return TW_STATUS;
 }

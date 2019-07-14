@@ -173,3 +173,6 @@
 
 // soft reset
 #define SRST 0x80
+
+uint16_t mpr121_send_touch_status(void);
+void mpr121_autoconf(void);

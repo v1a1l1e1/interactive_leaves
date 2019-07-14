@@ -17,14 +17,20 @@ int main(void){
 	print_String("\r\n --- MPR121 test --\r\n");
 	i2c_init();
 	
-	uint8_t data;
+	uint8_t data0, data1;
 	while(1){
 		i2c_start();
-		i2c_tx_data(SLA_R);
+		i2c_tx_data(SLA_W);
+		//controllo ack
+		i2c_tx_data(TOUCH_STATUS0);
+		//controllo ack
 		i2c_start();
-		data = i2c_rx_data(1);
+		i2c_tx_data(SLA_R);
+		//controllo ack
+		data0 = i2c_rx_data(1);
 		i2c_stop();
-		print_byte(data);
+		print_byte(data0);
+		print_byte(data1);
 		_delay_ms(500);
 	}
 	return 0;
