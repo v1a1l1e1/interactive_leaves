@@ -1,6 +1,6 @@
 #include <avr/io.h>
 #include <util/delay.h>
-#include <util/twi.h>
+#include <util/twi.h> // per i codici di errore
 #include <avr/interrupt.h>
 
 /* defs */
@@ -15,8 +15,6 @@ void i2c_stop(uint8_t addr);
 uint8_t i2c_tx_data (uint8_t data);
 uint8_t i2c_rx_data(uint8_t ack);
 uint8_t i2c_get_data(void);
-void i2c_ack(void);
-void i2c_nack(void);
 void i2c_wait(uint8_t timeout);
 
 void i2c_init(void){
@@ -55,6 +53,7 @@ void i2c_tx_data(uint8_t data){
 }
 
 uint8_t i2c_rx_data (uint8_t ack){
+	SDA_R();
 	if (ack){
 		TWCR = (TWCR & 0x0f) | (1 << TWINT) | (1 << TWEN) | (1 << TWEA));
 		while ((TWCR & (1 << TWINT)) == 0) 
@@ -75,12 +74,4 @@ uint8_t i2c_get_data(void){
 void i2c_wait(uint8_t timeout){
 	while ( ((TWCR & (1 << TWINT)) == 0)) && (i < timeout)
 		++i;
-}
-
-void i2c_ack(void){
-	TWCR |= (1<<TWEA);
-}
-
-void i2c_nack(void){
-	TWCR &= ~(1<<TWEA);
 }
