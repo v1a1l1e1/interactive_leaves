@@ -1,3 +1,5 @@
+#include "mpr121.h"
+
 uint8_t mpr121_init(void){
 #ifndef I2C_INIT
 	i2c_init();
