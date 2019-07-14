@@ -9,17 +9,13 @@
 #define SDA_R() DDRC &= ~(1 << PC4) // input
 #define TWBR_V 32
 
-/* dichiarazioni */
-
 void i2c_init(void);
 void i2c_start(void);
 void i2c_stop(uint8_t addr);
 uint8_t i2c_tx_data (uint8_t data);
 uint8_t i2c_rx_data(uint8_t ack);
 uint8_t i2c_get_data(void);
-uint8_t i2c_get_status(void);
-
-/*definizioni */
+void i2c_wait(uint8_t timeout);
 
 void i2c_init(void){
 	/*
@@ -73,6 +69,7 @@ uint8_t i2c_get_data(void){
 	return TWDR;
 }
 
-uint8_t i2c_get_status(void){
-	return TW_STATUS;
+void i2c_wait(uint8_t timeout){
+	while ( ((TWCR & (1 << TWINT)) == 0)) && (i < timeout)
+		++i;
 }
