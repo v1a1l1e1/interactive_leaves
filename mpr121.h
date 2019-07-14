@@ -278,7 +278,7 @@ void mpr121_reset(void){
 		mpr121_write(MPR121_TOUCHTH_0 + 2*i, 150);
 		mpr121_write(MPR121_RELEASETH_0 + 2*i, 50);
   	}
-	delay(5);
+	_delay_ms(5);
 	runMode();	
 }
 
