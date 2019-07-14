@@ -382,7 +382,7 @@ void mpr121_rising_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl)
   	mpr121_write(MHDR, _mhd); 	// maximum half-delta (0 - 63) 
   	mpr121_write(NHDR, _nhd);	// noise half-delta (0 - 63)
   	mpr121_write(NCLR, ncl);	// noise count limit
-  	mpr121_write(MPR121_FDLR, fdl);	// filter delay count
+  	mpr121_write(FDLR, fdl);	// filter delay count
 	runMode();	
 }
 
