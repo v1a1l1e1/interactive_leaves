@@ -1,0 +1,12 @@
+avr-size -C --mcu=atmega168 interactive_leaves.elf
+AVR Memory Usage
+----------------
+Device: atmega168
+
+Program:    1322 bytes (8.1% Full)
+(.text + .data + .bootloader)
+
+Data:         54 bytes (5.3% Full)
+(.data + .bss + .noinit)
+
+
