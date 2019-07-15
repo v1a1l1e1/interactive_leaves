@@ -178,7 +178,7 @@
 #define SRST 0x80
 
 #define MPR121_ADD8 0x5A
-#define MPR121_ADD (MPR121_ADD << 1)
+#define MPR121_ADD (MPR121_ADD8 << 1)
 #define SLA_R (MPR121_ADD | 0x01)
 #define SLA_W (MPR121_ADD & 0xFE)
 
@@ -193,10 +193,10 @@ void mpr121_runMode(void);
 uint16_t mpr121_nirq(void);
 
 uint8_t mpr121_read(uint8_t add);
-uint16_t mpr121_read2(uint8_t add);
+uint16_t mpr121_read2(uint8_t addl, uint8_t addh);
 void mpr121_write(uint8_t add, uint8_t data);
 
-uint8_t mpr121_touch(void);
+uint16_t mpr121_touch(void);
 uint16_t mpr121_filteredData(uint8_t t);
 uint16_t mpr121_baselineData(uint8_t t);
 
