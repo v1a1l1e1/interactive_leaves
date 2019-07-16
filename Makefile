@@ -58,7 +58,7 @@ all: $(TARGET).hex
 
 debug:
 	@echo
-	@echo "Source files:"   $(SOURCES)
+	@echo "Codici Sorgente:"   $(SOURCES)
 	@echo "MCU, F_CPU, BAUD:"  $(MCU), $(F_CPU), $(BAUD)
 	@echo	
 
