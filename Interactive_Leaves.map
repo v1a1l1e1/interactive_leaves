@@ -72,6 +72,8 @@ Discarded input sections
                 0x0000000000000000        0xe libs/usart.o
  .text.read_string
                 0x0000000000000000       0x58 libs/usart.o
+ .text.print_byte
+                0x0000000000000000       0x32 libs/usart.o
  .text.print_word
                 0x0000000000000000       0x76 libs/usart.o
  .text.print_binary_byte
@@ -87,6 +89,8 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_udivmodqi4.o)
  .text.libgcc.mul
                 0x0000000000000000        0x0 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_udivmodqi4.o)
+ .text.libgcc.div
+                0x0000000000000000       0x18 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_udivmodqi4.o)
  .text.libgcc   0x0000000000000000        0x0 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_udivmodqi4.o)
  .text.libgcc.prologue
                 0x0000000000000000        0x0 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_udivmodqi4.o)
@@ -278,7 +282,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000      0x4f6
+.text           0x0000000000000000      0x492
  *(.vectors)
  .vectors       0x0000000000000000       0x68 /usr/lib/gcc/avr/4.9.2/../../../avr/lib/avr5/crtatmega168.o
                 0x0000000000000000                __vectors
@@ -363,82 +367,76 @@ END GROUP
                 0x00000000000000a6                . = ALIGN (0x2)
  *(.text.*)
  .text.__vector_1
-                0x00000000000000a6       0x80 test.o
+                0x00000000000000a6       0x66 test.o
                 0x00000000000000a6                __vector_1
  .text.init_interrupt
-                0x0000000000000126        0xe test.o
-                0x0000000000000126                init_interrupt
+                0x000000000000010c        0xe test.o
+                0x000000000000010c                init_interrupt
  .text.startup.main
-                0x0000000000000134       0x8c test.o
-                0x0000000000000134                main
+                0x000000000000011a       0x8c test.o
+                0x000000000000011a                main
  .text.mpr121_read
-                0x00000000000001c0       0x3a libs/mpr121.o
-                0x00000000000001c0                mpr121_read
+                0x00000000000001a6       0x3a libs/mpr121.o
+                0x00000000000001a6                mpr121_read
  .text.mpr121_read2
-                0x00000000000001fa       0x6e libs/mpr121.o
-                0x00000000000001fa                mpr121_read2
+                0x00000000000001e0       0x6e libs/mpr121.o
+                0x00000000000001e0                mpr121_read2
  .text.mpr121_write
-                0x0000000000000268       0x34 libs/mpr121.o
-                0x0000000000000268                mpr121_write
+                0x000000000000024e       0x34 libs/mpr121.o
+                0x000000000000024e                mpr121_write
  .text.mpr121_touch
-                0x000000000000029c        0x8 libs/mpr121.o
-                0x000000000000029c                mpr121_touch
+                0x0000000000000282        0x8 libs/mpr121.o
+                0x0000000000000282                mpr121_touch
  .text.mpr121_nirq
-                0x00000000000002a4        0x4 libs/mpr121.o
-                0x00000000000002a4                mpr121_nirq
+                0x000000000000028a        0x4 libs/mpr121.o
+                0x000000000000028a                mpr121_nirq
  .text.mpr121_stopMode
-                0x00000000000002a8        0x8 libs/mpr121.o
-                0x00000000000002a8                mpr121_stopMode
+                0x000000000000028e        0x8 libs/mpr121.o
+                0x000000000000028e                mpr121_stopMode
  .text.mpr121_runMode
-                0x00000000000002b0        0x8 libs/mpr121.o
-                0x00000000000002b0                mpr121_runMode
+                0x0000000000000296        0x8 libs/mpr121.o
+                0x0000000000000296                mpr121_runMode
  .text.mpr121_reset
-                0x00000000000002b8       0xd6 libs/mpr121.o
-                0x00000000000002b8                mpr121_reset
+                0x000000000000029e       0xd6 libs/mpr121.o
+                0x000000000000029e                mpr121_reset
  .text.mpr121_init
-                0x000000000000038e       0x28 libs/mpr121.o
-                0x000000000000038e                mpr121_init
+                0x0000000000000374       0x28 libs/mpr121.o
+                0x0000000000000374                mpr121_init
  .text.i2c_init
-                0x00000000000003b6       0x1a libs/i2c.o
-                0x00000000000003b6                i2c_init
+                0x000000000000039c       0x1a libs/i2c.o
+                0x000000000000039c                i2c_init
  .text.i2c_start
-                0x00000000000003d0       0x12 libs/i2c.o
-                0x00000000000003d0                i2c_start
+                0x00000000000003b6       0x12 libs/i2c.o
+                0x00000000000003b6                i2c_start
  .text.i2c_stop
-                0x00000000000003e2        0xa libs/i2c.o
-                0x00000000000003e2                i2c_stop
+                0x00000000000003c8        0xa libs/i2c.o
+                0x00000000000003c8                i2c_stop
  .text.i2c_tx_data
-                0x00000000000003ec       0x16 libs/i2c.o
-                0x00000000000003ec                i2c_tx_data
+                0x00000000000003d2       0x16 libs/i2c.o
+                0x00000000000003d2                i2c_tx_data
  .text.i2c_rx_data
-                0x0000000000000402       0x36 libs/i2c.o
-                0x0000000000000402                i2c_rx_data
+                0x00000000000003e8       0x36 libs/i2c.o
+                0x00000000000003e8                i2c_rx_data
  .text.i2c_get_data
-                0x0000000000000438        0x6 libs/i2c.o
-                0x0000000000000438                i2c_get_data
+                0x000000000000041e        0x6 libs/i2c.o
+                0x000000000000041e                i2c_get_data
  .text.i2c_wait
-                0x000000000000043e       0x14 libs/i2c.o
-                0x000000000000043e                i2c_wait
+                0x0000000000000424       0x14 libs/i2c.o
+                0x0000000000000424                i2c_wait
  .text.init_usart
-                0x0000000000000452       0x22 libs/usart.o
-                0x0000000000000452                init_usart
+                0x0000000000000438       0x22 libs/usart.o
+                0x0000000000000438                init_usart
  .text.transmit_byte
-                0x0000000000000474        0xe libs/usart.o
-                0x0000000000000474                transmit_byte
+                0x000000000000045a        0xe libs/usart.o
+                0x000000000000045a                transmit_byte
  .text.print_string
-                0x0000000000000482       0x26 libs/usart.o
-                0x0000000000000482                print_string
- .text.print_byte
-                0x00000000000004a8       0x32 libs/usart.o
-                0x00000000000004a8                print_byte
- .text.libgcc.div
-                0x00000000000004da       0x18 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_udivmodqi4.o)
-                0x00000000000004da                __udivmodqi4
-                0x00000000000004f2                . = ALIGN (0x2)
+                0x0000000000000468       0x26 libs/usart.o
+                0x0000000000000468                print_string
+                0x000000000000048e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x00000000000004f2        0x0 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_exit.o)
-                0x00000000000004f2                exit
-                0x00000000000004f2                _exit
+ .fini9         0x000000000000048e        0x0 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_exit.o)
+                0x000000000000048e                exit
+                0x000000000000048e                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -457,11 +455,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x00000000000004f2        0x4 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_exit.o)
+ .fini0         0x000000000000048e        0x4 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_exit.o)
  *(.fini0)
-                0x00000000000004f6                _etext = .
+                0x0000000000000492                _etext = .
 
-.data           0x0000000000800100       0x34 load address 0x00000000000004f6
+.data           0x0000000000800100       0x34 load address 0x0000000000000492
                 0x0000000000800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -482,8 +480,8 @@ END GROUP
  COMMON         0x0000000000800134        0x2 test.o
                 0x0000000000800134                stato
                 0x0000000000800136                PROVIDE (__bss_end, .)
-                0x00000000000004f6                __data_load_start = LOADADDR (.data)
-                0x000000000000052a                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000000000000492                __data_load_start = LOADADDR (.data)
+                0x00000000000004c6                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0000000000800136        0x0
                 0x0000000000800136                PROVIDE (__noinit_start, .)
@@ -511,14 +509,14 @@ END GROUP
 .user_signatures
  *(.user_signatures*)
 
-.stab           0x0000000000000000     0x1bb4
+.stab           0x0000000000000000     0x1b24
  *(.stab)
- .stab          0x0000000000000000      0x72c test.o
- .stab          0x000000000000072c      0x990 libs/mpr121.o
+ .stab          0x0000000000000000      0x714 test.o
+ .stab          0x0000000000000714      0x990 libs/mpr121.o
                                        0x1590 (size before relaxing)
- .stab          0x00000000000010bc      0x5f4 libs/i2c.o
+ .stab          0x00000000000010a4      0x5f4 libs/i2c.o
                                         0x7bc (size before relaxing)
- .stab          0x00000000000016b0      0x504 libs/usart.o
+ .stab          0x0000000000001698      0x48c libs/usart.o
                                         0xa80 (size before relaxing)
 
 .stabstr        0x0000000000000000     0x12f8
@@ -612,5 +610,5 @@ END GROUP
 
 .debug_macro
  *(.debug_macro)
-OUTPUT(interactive_leaves.elf elf32-avr)
+OUTPUT(Interactive_Leaves.elf elf32-avr)
 LOAD linker stubs

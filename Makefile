@@ -1,30 +1,40 @@
+################
+### MAKEFILE ###
+################
+
 MCU   = atmega168
 F_CPU = 1000000UL  
 BAUD  = 9600UL
 
 LIBDIR = ./libs
 
+
 PROGRAMMER_TYPE = usbtiny
+
 CC = avr-gcc
 OBJCOPY = avr-objcopy
 OBJDUMP = avr-objdump
 AVRSIZE = avr-size
 AVRDUDE = avrdude
-TARGET = interactive_leaves
+
+TARGET = Interactive_Leaves
 
 SOURCES=$(wildcard *.c $(LIBDIR)/*.c)
 OBJECTS=$(SOURCES:.c=.o)
 HEADERS=$(SOURCES:.c=.h)
 
+
 CPPFLAGS = -DF_CPU=$(F_CPU) -DBAUD=$(BAUD) -I. -I$(LIBDIR)
-CFLAGS = -Os -g -std=gnu99 -Wall
+CFLAGS = -Os -g -std=gnu99 -Wall 
 CFLAGS += -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums 
 CFLAGS += -ffunction-sections -fdata-sections 
 LDFLAGS = -Wl,-Map,$(TARGET).map 
 LDFLAGS += -Wl,--gc-sections 
 
+## LDFLAGS += -Wl,--relax
+## LDFLAGS += -Wl,-u,vfprintf -lprintf_flt -lm  ## floating-point printf
+## LDFLAGS += -Wl,-u,vfprintf -lprintf_min      ## minima printf
 TARGET_ARCH = -mmcu=$(MCU)
-
 
 %.o: %.c $(HEADERS) Makefile
 	 $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -o $@ $<;
@@ -41,13 +51,14 @@ $(TARGET).elf: $(OBJECTS)
 %.lst: %.elf
 	$(OBJDUMP) -S $< > $@
 
+
 .PHONY: all disassemble disasm eeprom size clean squeaky_clean flash fuses
 
 all: $(TARGET).hex 
 
 debug:
 	@echo
-	@echo "Codice sorgente:"   $(SOURCES)
+	@echo "Source files:"   $(SOURCES)
 	@echo "MCU, F_CPU, BAUD:"  $(MCU), $(F_CPU), $(BAUD)
 	@echo	
 
@@ -55,7 +66,7 @@ debug:
 disassemble: $(TARGET).lst
 disasm: disassemble
 
-# per debug: quanto pesa il firmware
+ 
 size:  $(TARGET).elf
 	$(AVRSIZE) -C --mcu=$(MCU) $(TARGET).elf
 
@@ -68,8 +79,9 @@ clean:
 squeaky_clean:
 	rm -f *.elf *.hex *.obj *.o *.d *.eep *.lst *.lss *.sym *.map *~ *.eeprom
 
+
 flash: $(TARGET).hex 
-	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) -U flash:w:$<s
+	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) -U flash:w:$<
 program: flash
 
 flash_eeprom: $(TARGET).eeprom
@@ -86,14 +98,10 @@ flash_stk500: PROGRAMMER_TYPE = stk500
 flash_stk500: PROGRAMMER_ARGS = -P /dev/ttyUSB0
 flash_stk500: flash
 
-
-## valori di default dei fusi
-## Mega 48, 88, 168, 328
 LFUSE = 0x62
 HFUSE = 0xdf
 EFUSE = 0x00
-
-
+ 
 FUSE_STRING = -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m 
 
 fuses: 
@@ -101,7 +109,6 @@ fuses:
 	           $(PROGRAMMER_ARGS) $(FUSE_STRING)
 show_fuses:
 	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) -nv	
-
 
 set_default_fuses:  FUSE_STRING = -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m 
 set_default_fuses:  fuses

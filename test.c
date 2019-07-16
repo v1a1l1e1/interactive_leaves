@@ -10,16 +10,20 @@ volatile uint16_t stato;
 
 ISR(INT0_vect){
 stato = mpr121_nirq();
-print_byte((uint8_t)stato & 0x00ff);
-print_byte((uint8_t)stato & 0xff00);
+cli();
+print_string("T --> ");
+print_word(stato);
+print_string("\r\n");
 PORTB |= (1 << PB0);
 _delay_ms(500);
 PORTB &= ~(1 << PB0);
+sei();
 }
 
 void init_interrupt(void){
 	EIMSK |= (1<<INT0);
 	EICRA &= ~((1 << ISC00) | (1 << ISC00));
+	sei();
 }
 
 int main(void){
@@ -37,12 +41,10 @@ int main(void){
 
 		while(1){
 			stato = 0x0000;
-			sei();
 			if (stato != prev){
 				prev = stato;
 				PORTB |= (1 << PB4);
 				_delay_ms(1);
-				cli();
 			} else {
 				PORTB &= ~(1<<PB4);
 				_delay_ms(1);
