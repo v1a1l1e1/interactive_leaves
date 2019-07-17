@@ -28,6 +28,12 @@ uint8_t receive_byte(void){
 	return UDR0;					//UDR0 contiene i dati da leggere in input
 }
 
+void flush( void )
+{
+	unsigned char dummy;
+	while ( UCSR0A & (1<<RXC0) ) dummy = UDR0;
+}
+
 void print_string(const char string[]){			// stampa una stringa di caratteri sul monitor seriale, un byte alla volta
 	uint8_t i=0;
 	while(string[i]){

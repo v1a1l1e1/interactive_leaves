@@ -1,32 +1,36 @@
+#include <util/delay.h>
 #include "mpr121.h"
+#include "usart.h"
 
 uint8_t mpr121_init(void){
-#ifndef I2C_INIT
+	print_string("\r\n\t\t >> mpr121_init()\r\n");	
 	i2c_init();
-	#define I2C_INIT
-#endif
+	print_string("\r\n\t\t >> i2c_init() OK\r\n");
 	mpr121_write(SRST,0x63);
-	i2c_wait(TIMEOUT);
-	uint8_t c = mpr121_read(CDT_GLOBAL); 
-	if (c != 0x24) return 0;
+	print_string("\r\n\t\t >> mpr121_write() OK\r\n");
+	print_string("\r\n\t\t >> provo con il read\r\n");
+	uint8_t t= mpr121_read(CDT_GLOBAL);
+	print_byte(t);
+	print_string("\r\n\t\t >> mpr121_read() OK\r\n");
 	mpr121_reset();
 	return 1;
 }
 
 uint8_t mpr121_read(uint8_t add){
+	print_string("\r\n\t\t >> mpr121_read()\r\n");	
 	uint8_t data;
 	i2c_start();
-	i2c_tx_data(SLA_W);
+	i2c_address(SLA_W);
 	i2c_tx_data(add);
-	i2c_start();
+	//i2c_start();
 	i2c_tx_data(SLA_R);
-	i2c_rx_data(ACK);
-	data = i2c_get_data();
-	i2c_wait(TIMEOUT);
+	data = i2c_rx_data(NACK);
 	i2c_stop();
+	print_string("\r\n\t\t >> mpr121_read() OK\r\n");	
 	return (data);
 }
 
+// per dati a 16 bit su due registri da 1 byte
 uint16_t mpr121_read2(uint8_t addl, uint8_t addh){
 	uint16_t data;
 	i2c_start();
@@ -34,20 +38,18 @@ uint16_t mpr121_read2(uint8_t addl, uint8_t addh){
 	i2c_tx_data(addl);
 	i2c_start();
 	i2c_tx_data(SLA_R);
-	i2c_rx_data(ACK);
-	data = i2c_get_data();
-	i2c_wait(TIMEOUT);
+	data = i2c_rx_data(ACK);
 	i2c_tx_data(SLA_W);
 	i2c_tx_data(addh);
-	i2c_rx_data(NACK);
-	data |= ((i2c_get_data() & 0x1F) << 8);
+	data |= ( (i2c_rx_data(NACK) & 0x1F) << 8);
 	i2c_stop();
 	return (data);
 }
 
 void mpr121_write(uint8_t add, uint8_t data){
+	print_string("\r\n\t\t >> mpr121_write()\r\n");	
 	i2c_start();
-	i2c_tx_data(SLA_W);
+	i2c_address(SLA_W);
 	i2c_tx_data(add);
 	i2c_tx_data(data);
 	i2c_stop();
@@ -64,8 +66,9 @@ uint16_t mpr121_nirq(void){
 }
 
 void mpr121_reset(void){
+	print_string("\r\n\t\t >> mpr121_reset()\r\n");	
 	mpr121_write(SRST, 0x63);
-	_delay_ms(1);
+	_delay_us(500);
 	
 	mpr121_stopMode();
 	
@@ -101,7 +104,7 @@ void mpr121_reset(void){
 		mpr121_write(E0TTH + 2*i, 150);
 		mpr121_write(E0RTH + 2*i, 50);
   	}
-	_delay_ms(1);
+	_delay_us(500);
 	mpr121_runMode();	
 }
 
@@ -198,7 +201,7 @@ void mpr121_falling_condition(uint8_t mhd_, uint8_t nhd_, uint8_t ncl, uint8_t f
 	mpr121_runMode();	
 }
 
-void mpr121_set_touched(uint8_t nhd_, uint8_t ncl, uint8_t fdl)
+void mpr121_touched_condition(uint8_t nhd_, uint8_t ncl, uint8_t fdl)
 {
 	uint8_t nhd = nhd_ & 0x3F;
 	
@@ -271,5 +274,5 @@ uint16_t  mpr121_baselineData(uint8_t ele) {
 }
 
 uint16_t  mpr121_touched(void) {
-  return ( read2(TOUCH_STATUS0, TOUCH_STATUS1) & 0x0FFF);
+  return ( mpr121_read2(TOUCH_STATUS0, TOUCH_STATUS1) & 0x0FFF);
 }

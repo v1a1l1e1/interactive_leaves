@@ -200,19 +200,21 @@ uint16_t mpr121_touch(void);
 uint16_t mpr121_filteredData(uint8_t t);
 uint16_t mpr121_baselineData(uint8_t t);
 
-void mpr121_setThresholds(uint8_t touch, uint8_t release);
-void mpr121_set_MHD(uint8_t rising, uint8_t falling);
-void mpr121_set_NHD(uint8_t rising, uint8_t falling, uint8_t touched);
-void mpr121_set_NCL(uint8_t rising, uint8_t falling, uint8_t touched);
-void mpr121_set_FDL(uint8_t rising, uint8_t falling, uint8_t touched);
 void mpr121_set_CDC(uint8_t cdc);
 void mpr121_set_CDT(uint8_t cdt);  
 void mpr121_set_FFI(uint8_t ffi);
 void mpr121_set_ESI(uint8_t esi);
 void mpr121_set_SFI(uint8_t sfi);
+
 void mpr121_set_debounces(uint8_t touch, uint8_t release);
+void mpr121_setThresholds(uint8_t touch, uint8_t release);
+
+void mpr121_set_MHD(uint8_t rising, uint8_t falling);
+void mpr121_set_NHD(uint8_t rising, uint8_t falling, uint8_t touched);
+void mpr121_set_NCL(uint8_t rising, uint8_t falling, uint8_t touched);
+void mpr121_set_FDL(uint8_t rising, uint8_t falling, uint8_t touched);
 void mpr121_rising_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
 void mpr121_falling_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
-void mpr121_set_touched(uint8_t nhd, uint8_t ncl, uint8_t fdl);
+void mpr121_touched_condition(uint8_t nhd, uint8_t ncl, uint8_t fdl);
 
 

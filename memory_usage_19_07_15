@@ -1,4 +1,4 @@
-avr-size -C --mcu=atmega168 interactive_leaves.elf
+avr-size -C --mcu=atmega168 Interactive_Leaves.elf
 AVR Memory Usage
 ----------------
 Device: atmega168

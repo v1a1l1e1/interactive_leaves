@@ -7,6 +7,7 @@
 void init_usart(void);
 void transmit_byte(uint8_t data);
 uint8_t receive_byte(void);
+void flush(void);
 
 void print_string(const char string[]);
 void read_string(char string[], uint8_t max_length);
