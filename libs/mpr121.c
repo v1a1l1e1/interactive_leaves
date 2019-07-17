@@ -22,7 +22,7 @@ uint8_t mpr121_read(uint8_t add){
 	i2c_start();
 	i2c_address(SLA_W);
 	i2c_tx_data(add);
-	//i2c_start();
+	i2c_restart();
 	i2c_tx_data(SLA_R);
 	data = i2c_rx_data(NACK);
 	i2c_stop();
@@ -36,7 +36,7 @@ uint16_t mpr121_read2(uint8_t addl, uint8_t addh){
 	i2c_start();
 	i2c_tx_data(SLA_W);
 	i2c_tx_data(addl);
-	i2c_start();
+	i2c_restart();
 	i2c_tx_data(SLA_R);
 	data = i2c_rx_data(ACK);
 	i2c_tx_data(SLA_W);

@@ -23,7 +23,16 @@ void i2c_start(void){
 	TWCR = (1<<TWINT)|(1 << TWSTA)|(1 << TWEN);
 	while ((TWCR & (1 << TWINT))==0) 
 		;
-	while ((TWSR & 0xF8)!=0x08)	// aspetto ack
+	while ((TWSR & 0xF8)!=0x08)	// START CONDITION trasmessa
+		;
+}
+
+void i2c_restart(void){
+	print_string("\r\n\t\t\t ---> i2c_restart()\r\n");
+	TWCR = (1<<TWINT)|(1 << TWSTA)|(1 << TWEN);
+	while ((TWCR & (1 << TWINT))==0) 
+		;
+	while ((TWSR & 0xF8)!=0x10)	// START CONDITION trasmessa
 		;
 }
 
@@ -40,6 +49,8 @@ void i2c_address(uint8_t add_rw){
 	TWDR = add_rw;
 	TWCR = (1<<TWINT)|(1<<TWEN);
 	while(!(TWCR & (1<<TWINT))) ; //tx completato
+	if((TWSR & 0xF8) == 0x18) print_string("\r\n\t\t\t ---> SLA+W (t) e ACK (r)\r\n"); 
+	if((TWSR & 0xF8) == 0x40) print_string("\r\n\t\t\t ---> SLA+R (t) e ACK (r)\r\n"); 
 }
 
 void i2c_tx_data(uint8_t data){
@@ -48,6 +59,7 @@ void i2c_tx_data(uint8_t data){
 	TWDR = data;
 	TWCR = (1 << TWINT) | (1 << TWEN);
 	while (!(TWCR & (1 << TWINT))) ;
+	if ((TWSR & 0xF8) == 0x28) print_string("\r\n\t\t\t ---> data (t) e ACK (r)\r\n"); 
 	print_string("\r\n\t\t\t ---> i2c_tx_data() OK\r\n");
 }
 
@@ -62,7 +74,8 @@ uint8_t i2c_rx_data (uint8_t ack){
 		TWCR = (1 << TWINT) | (1 << TWEN);
 	}
 	while(! (TWCR & (1<<TWINT))) print_string("\r\n\t\t\t\t ===> aspetto TWINT\r\n");
-	//while((TWSR & 0xF8) != 0x58) print_string("\r\n\t\t\t\t ===> aspetto ACK\r\n");
+	if ((TWSR & 0xF8) == 0x50) print_string("\r\n\t\t\t ---> data (r) e ACK (r)\r\n");
+	if ((TWSR & 0xF8) == 0x58) print_string("\r\n\t\t\t ---> data (r) e NACK (r)\r\n"); 
 	print_string("\r\n\t\t\t ---> i2c_rx_data() OK\r\n");
 	return (TWDR);
 }

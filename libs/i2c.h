@@ -8,6 +8,7 @@
 
 void i2c_init(void);
 void i2c_start(void);
+void i2c_restart(void);
 void i2c_stop(void);
 void i2c_address(uint8_t add_rw);
 void i2c_tx_data (uint8_t data);
