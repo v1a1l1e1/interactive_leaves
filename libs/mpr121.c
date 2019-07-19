@@ -3,21 +3,20 @@
 #include "usart.h"
 
 uint8_t mpr121_init(void){
-	print_string("\r\n\t\t >> mpr121_init()\r\n");	
+#ifndef I2C_INIT
 	i2c_init();
-	print_string("\r\n\t\t >> i2c_init() OK\r\n");
+#endif
+	i2c_init();
 	mpr121_write(SRST,0x63);
-	print_string("\r\n\t\t >> mpr121_write() OK\r\n");
-	print_string("\r\n\t\t >> provo con il read\r\n");
 	uint8_t t= mpr121_read(CDT_GLOBAL);
+	print_string("\r\nCDT = ");	
 	print_byte(t);
-	print_string("\r\n\t\t >> mpr121_read() OK\r\n");
+	print_string("\r\n");
 	mpr121_reset();
 	return 1;
 }
 
 uint8_t mpr121_read(uint8_t add){
-	print_string("\r\n\t\t >> mpr121_read()\r\n");	
 	uint8_t data;
 	i2c_start();
 	i2c_address(SLA_W);
@@ -26,7 +25,6 @@ uint8_t mpr121_read(uint8_t add){
 	i2c_tx_data(SLA_R);
 	data = i2c_rx_data(NACK);
 	i2c_stop();
-	print_string("\r\n\t\t >> mpr121_read() OK\r\n");	
 	return (data);
 }
 
@@ -47,7 +45,6 @@ uint16_t mpr121_read2(uint8_t addl, uint8_t addh){
 }
 
 void mpr121_write(uint8_t add, uint8_t data){
-	print_string("\r\n\t\t >> mpr121_write()\r\n");	
 	i2c_start();
 	i2c_address(SLA_W);
 	i2c_tx_data(add);
@@ -55,18 +52,38 @@ void mpr121_write(uint8_t add, uint8_t data){
 	i2c_stop();
 }
 
-uint16_t mpr121_touch(void){
-	uint16_t status;
-	status = mpr121_read2(TOUCH_STATUS0, TOUCH_STATUS1);
-	return status;
+uint16_t  mpr121_touched(void) {
+  return ( mpr121_read2(TOUCH_STATUS0, TOUCH_STATUS1) & 0x0FFF);
 }
 
-uint16_t mpr121_nirq(void){
-	return mpr121_touch();
+uint16_t mpr121_touch(void){
+	return (mpr121_read2(TOUCH_STATUS0, TOUCH_STATUS1));
+}
+
+uint16_t mpr121_read_status(void){
+	uint16_t s = (uint16_t)mpr121_read(TOUCH_STATUS1);
+	s = (s << 8);
+	s |= mpr121_read(TOUCH_STATUS0);
+	return s;
+}
+
+void format_status(uint16_t s){
+	uint8_t i;
+	for (i=0; i < 12; i++){
+		if ( (s & (1<<(11-i))) )
+			print_string("1");
+		else
+			print_string("0");
+	}
+	print_string("\r\n");
+}
+
+void mpr121_nirq(void){
+
+	format_status(mpr121_read_status());
 }
 
 void mpr121_reset(void){
-	print_string("\r\n\t\t >> mpr121_reset()\r\n");	
 	mpr121_write(SRST, 0x63);
 	_delay_us(500);
 	
@@ -273,6 +290,3 @@ uint16_t  mpr121_baselineData(uint8_t ele) {
   return (mpr121_read(E0BV + ele) << 2);
 }
 
-uint16_t  mpr121_touched(void) {
-  return ( mpr121_read2(TOUCH_STATUS0, TOUCH_STATUS1) & 0x0FFF);
-}

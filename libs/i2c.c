@@ -1,3 +1,4 @@
+#include <util/delay.h>
 #include "i2c.h"
 #include "usart.h"
 
@@ -11,15 +12,17 @@
 */
 
 void i2c_init(void){
-	#define I2C_INIT
-	print_string("\r\n\t\t\t ---> i2c_init()\r\n");		
+#define I2C_INIT
+#ifndef USART_INIT
+	init_usart();
+#endif		
 	TWBR = TWBR_V; // 
 	TWSR = (0<<TWPS0)|(0 << TWPS1); // prescaler = 1
 	TWCR |= (1 << TWEN);
 }
 
 void i2c_start(void){
-	print_string("\r\n\t\t\t ---> i2c_start()\r\n");
+	_delay_us(1);	
 	TWCR = (1<<TWINT)|(1 << TWSTA)|(1 << TWEN);
 	while ((TWCR & (1 << TWINT))==0) 
 		;
@@ -28,7 +31,6 @@ void i2c_start(void){
 }
 
 void i2c_restart(void){
-	print_string("\r\n\t\t\t ---> i2c_restart()\r\n");
 	TWCR = (1<<TWINT)|(1 << TWSTA)|(1 << TWEN);
 	while ((TWCR & (1 << TWINT))==0) 
 		;
@@ -37,45 +39,37 @@ void i2c_restart(void){
 }
 
 void i2c_stop(void){
-	print_string("\r\n\t\t\t ---> i2c_stop()\r\n");
 	TWCR = (1 << TWINT) | (1 << TWEN) | (1 << TWSTO);
 	while(!(TWCR & (1<<TWSTO)))
 		;
 }
 
 void i2c_address(uint8_t add_rw){
-	print_string("\r\n\t\t\t ---> i2c_address()\r\n");
 	SDA_W();
 	TWDR = add_rw;
 	TWCR = (1<<TWINT)|(1<<TWEN);
 	while(!(TWCR & (1<<TWINT))) ; //tx completato
-	if((TWSR & 0xF8) == 0x18) print_string("\r\n\t\t\t ---> SLA+W (t) e ACK (r)\r\n"); 
-	if((TWSR & 0xF8) == 0x40) print_string("\r\n\t\t\t ---> SLA+R (t) e ACK (r)\r\n"); 
+	if((TWSR & 0xF8) == 0x18) ;//print_string("\r\n\t\t\t ---> SLA+W (t) e ACK (r)\r\n"); 
+	if((TWSR & 0xF8) == 0x40) ;//print_string("\r\n\t\t\t ---> SLA+R (t) e ACK (r)\r\n"); 
 }
 
 void i2c_tx_data(uint8_t data){
-	print_string("\r\n\t\t\t ---> i2c_tx_data()\r\n");
 	SDA_W();
 	TWDR = data;
 	TWCR = (1 << TWINT) | (1 << TWEN);
 	while (!(TWCR & (1 << TWINT))) ;
-	if ((TWSR & 0xF8) == 0x28) print_string("\r\n\t\t\t ---> data (t) e ACK (r)\r\n"); 
-	print_string("\r\n\t\t\t ---> i2c_tx_data() OK\r\n");
+	if ((TWSR & 0xF8) == 0x28) ;//print_string("\r\n\t\t\t ---> data (t) e ACK (r)\r\n"); 
 }
 
 uint8_t i2c_rx_data (uint8_t ack){
-	print_string("\r\n\t\t\t ---> i2c_rx_data()\r\n");
 	SDA_R();
 	if (ack){
-		print_string("\r\n\t\t\t\t ===> ack true\r\n");
 		TWCR = ((1 << TWINT) | (1 << TWEN) | (1 << TWEA));
-	}else{
-		print_string("\r\n\t\t\t\t ===> ack false\r\n"); 
+	}else{ 
 		TWCR = (1 << TWINT) | (1 << TWEN);
 	}
-	while(! (TWCR & (1<<TWINT))) print_string("\r\n\t\t\t\t ===> aspetto TWINT\r\n");
-	if ((TWSR & 0xF8) == 0x50) print_string("\r\n\t\t\t ---> data (r) e ACK (r)\r\n");
-	if ((TWSR & 0xF8) == 0x58) print_string("\r\n\t\t\t ---> data (r) e NACK (r)\r\n"); 
-	print_string("\r\n\t\t\t ---> i2c_rx_data() OK\r\n");
+	while(! (TWCR & (1<<TWINT))) ;// print_string("\r\n\t\t\t\t ===> aspetto TWINT\r\n");
+	if ((TWSR & 0xF8) == 0x50) ;//print_string("\r\n\t\t\t ---> data (r) e ACK (t)\r\n");
+	if ((TWSR & 0xF8) == 0x58) ;//print_string("\r\n\t\t\t ---> data (r) e NACK (t)\r\n"); 
 	return (TWDR);
 }

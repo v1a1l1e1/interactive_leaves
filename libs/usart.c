@@ -4,6 +4,7 @@
 
 /* inizializzazione della USART */
 void init_usart(void){
+#define USART_INIT
 /* impostazione del valore di prescaler in base al baudrate. 12 bit */
 	UBRR0H = UBRRH_VALUE; 						/*UBRRnH = 4bit*/
 	UBRR0L = UBRRL_VALUE; 						/*UBRRnL = 8bit*/

@@ -190,13 +190,18 @@ uint8_t mpr121_init(void);
 void mpr121_reset(void);
 void mpr121_stopMode(void);
 void mpr121_runMode(void);
-uint16_t mpr121_nirq(void);
+void mpr121_nirq(void);
 
 uint8_t mpr121_read(uint8_t add);
 uint16_t mpr121_read2(uint8_t addl, uint8_t addh);
 void mpr121_write(uint8_t add, uint8_t data);
 
 uint16_t mpr121_touch(void);
+void mpr121_touch07(void);
+void mpr121_touch812(void);
+uint8_t check_bit(uint8_t byte, uint8_t bit);
+uint16_t mpr121_read_status(void);
+void format_status(uint16_t s);
 uint16_t mpr121_filteredData(uint8_t t);
 uint16_t mpr121_baselineData(uint8_t t);
 
