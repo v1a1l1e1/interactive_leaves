@@ -51,7 +51,7 @@ void mpr121_write(uint8_t add, uint8_t data){
 	i2c_tx_data(data);
 	i2c_stop();
 }
-
+/*
 uint16_t  mpr121_touched(void) {
   return ( mpr121_read2(TOUCH_STATUS0, TOUCH_STATUS1) & 0x0FFF);
 }
@@ -59,7 +59,7 @@ uint16_t  mpr121_touched(void) {
 uint16_t mpr121_touch(void){
 	return (mpr121_read2(TOUCH_STATUS0, TOUCH_STATUS1));
 }
-
+*/
 uint16_t mpr121_read_status(void){
 	uint16_t s = (uint16_t)mpr121_read(TOUCH_STATUS1);
 	s = (s << 8);
@@ -68,18 +68,20 @@ uint16_t mpr121_read_status(void){
 }
 
 void format_status(uint16_t s){
-	uint8_t i;
+	//print_byte('P');
+	s = s & 0x0FFF;
+	print_word(s);
+	/*uint8_t i;
 	for (i=0; i < 12; i++){
 		if ( (s & (1<<(11-i))) )
 			print_string("1");
 		else
 			print_string("0");
 	}
-	print_string("\r\n");
+	print_string("\r\n");*/
 }
 
 void mpr121_nirq(void){
-
 	format_status(mpr121_read_status());
 }
 

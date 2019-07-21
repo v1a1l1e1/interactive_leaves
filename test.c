@@ -7,7 +7,6 @@
 #include "mpr121.h"
 
 ISR(INT0_vect){
-	print_string("\r\ntocco\r\n");
 	cli();
 	mpr121_nirq();
 	sei();
