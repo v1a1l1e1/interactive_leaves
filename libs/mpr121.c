@@ -77,8 +77,8 @@ void format_status(uint16_t s){
 			print_string("1");
 		else
 			print_string("0");
-	}
-	print_string("\r\n");*/
+	}*/
+	//print_string("\r\n");
 }
 
 void mpr121_nirq(void){
