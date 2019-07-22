@@ -82,7 +82,9 @@ void format_status(uint16_t s){
 }
 
 void mpr121_nirq(void){
-	format_status(mpr121_read_status());
+	//format_status(mpr121_read_status());
+	transmit_byte(mpr121_read(TOUCH_STATUS0));
+	transmit_byte(mpr121_read(TOUCH_STATUS1)<<4);
 }
 
 void mpr121_reset(void){
