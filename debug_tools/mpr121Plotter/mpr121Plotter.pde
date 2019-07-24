@@ -2,15 +2,15 @@ import processing.serial.*;
 Serial s_port;
 
 int stato [];
-String r;
+byte inBuffer [];
 
 void setup(){
    size(800,300);
    smooth();
    stato = new int [12];
    s_port = new Serial(this, "/dev/ttyUSB0", 9600);
-   s_port.buffer(5);
-   r= ""; //ele3
+   s_port.buffer(2);
+   inBuffer = new byte[2];
    //r1=3; //ele8 ele9
 }
 
@@ -51,7 +51,7 @@ void update_status(int b){
 }
 
 void serialEvent(Serial s){
-    String inBuffer= s_port.readString();  
-    int n = Integer.parseInt(inBuffer);
+    s_port.readBytes(inBuffer);  
+    int n = inBuffer[0] + (inBuffer[1] << 4);
     update_status(n);
 }
