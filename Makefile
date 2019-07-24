@@ -103,10 +103,15 @@ HFUSE = 0xdf
 EFUSE = 0x00
  
 FUSE_STRING = -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m 
+MY_FUSE_STRING = -U lfuse:w:0x62:m -U hfuse:w:0xd9:m -U efuse:w:0xf9:m 
 
 fuses: 
 	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) \
 	           $(PROGRAMMER_ARGS) $(FUSE_STRING)
+
+my_fuses: 
+	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) \
+	           $(PROGRAMMER_ARGS) $(MY_FUSE_STRING)
 show_fuses:
 	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) -nv	
 
