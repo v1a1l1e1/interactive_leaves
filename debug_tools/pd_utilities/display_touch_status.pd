@@ -1,0 +1,53 @@
+#N canvas 1 82 952 506 10;
+#X obj 19 61 cnv 15 600 90 empty empty empty 20 12 0 14 -118446 -66577
+0;
+#X obj 405 95 tgl 30 0 empty empty 3 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 441 95 tgl 30 0 empty empty 2 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 480 95 tgl 30 0 empty empty 1 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 516 95 tgl 30 0 empty empty 0 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 258 95 tgl 30 0 empty empty 7 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 294 95 tgl 30 0 empty empty 6 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 333 95 tgl 30 0 empty empty 5 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 369 95 tgl 30 0 empty empty 4 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 112 95 tgl 30 0 empty empty 11 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 148 95 tgl 30 0 empty empty 10 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 187 95 tgl 30 0 empty empty 9 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 223 95 tgl 30 0 empty empty 8 15 42 0 15 -1 -262144 -159808
+0 1;
+#X obj 641 69 inlet e1;
+#X obj 703 69 inlet e0;
+#X obj 579 69 inlet e2;
+#X obj 517 69 inlet e3;
+#X obj 455 69 inlet e4;
+#X obj 393 69 inlet e5;
+#X obj 331 69 inlet e6;
+#X obj 269 69 inlet e7;
+#X obj 3 69 inlet e11;
+#X obj 73 69 inlet e10;
+#X obj 143 69 inlet e9;
+#X obj 206 69 inlet e8;
+#X text 190 18 VISUALIZZAZIONE DELLO STATO DEL TOCCO DELLE PIANTE;
+#X connect 13 0 3 0;
+#X connect 14 0 4 0;
+#X connect 15 0 2 0;
+#X connect 16 0 1 0;
+#X connect 17 0 8 0;
+#X connect 18 0 7 0;
+#X connect 19 0 6 0;
+#X connect 20 0 5 0;
+#X connect 21 0 9 0;
+#X connect 22 0 10 0;
+#X connect 23 0 11 0;
+#X connect 24 0 12 0;
+#X coords 0 -1 1 1 600 90 1 18 60;
