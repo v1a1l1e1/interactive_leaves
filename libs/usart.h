@@ -6,6 +6,7 @@
                  
 void init_usart(void);
 void transmit_byte(uint8_t data);
+void transmit_word(uint8_t data_l, uint8_t data_h);
 uint8_t receive_byte(void);
 void flush(void);
 

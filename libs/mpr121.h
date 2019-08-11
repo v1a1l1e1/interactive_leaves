@@ -222,4 +222,4 @@ void mpr121_rising_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl)
 void mpr121_falling_condition(uint8_t mhd, uint8_t nhd, uint8_t ncl, uint8_t fdl);
 void mpr121_touched_condition(uint8_t nhd, uint8_t ncl, uint8_t fdl);
 
-
+void  send_info(uint8_t address);

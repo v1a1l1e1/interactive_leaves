@@ -294,3 +294,14 @@ uint16_t  mpr121_baselineData(uint8_t ele) {
   return (mpr121_read(E0BV + ele) << 2);
 }
 
+
+/* CONFIGURAZIONE PROCESSING*/
+
+void send_info(uint8_t add){
+	transmit_byte(20);
+	transmit_word(mpr121_baselineData(add));
+	transmit_byte(21);
+	transmit_byte(mpr121_filteredData(add));
+//	transmit_byte(22);
+//	transmit_byte(mpr121_touch(add));
+}

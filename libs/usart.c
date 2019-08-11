@@ -24,6 +24,11 @@ void transmit_byte(uint8_t data){
 	UDR0 = data;								//UDR0 contiene i dati da inviare in output
 }
 
+void transmit_word(uint8_t l, uint8_t h){
+	transmit_byte(l);
+	transmit_byte(h);
+}
+
 uint8_t receive_byte(void){
 	loop_until_bit_is_set(UCSR0A, RXC0);		//RXC0 è a 1 quando un frame è pronto per essere ricevuto
 	return UDR0;					//UDR0 contiene i dati da leggere in input
