@@ -30,14 +30,15 @@ int main(void){
 	init_interrupt();	
 	flush();
 	
-	if (mpr121_init())
-		print_string("\r\nMPR121: init() OK\r\n");
+	if (mpr121_init()){
+//		print_string("\r\nMPR121: init() OK\r\n");
 	
 
 
-	while(1){
-		PORTB ^= (1 << PB0);
-		_delay_ms(250);
+		while(1){
+			PORTB ^= (1 << PB0);
+			_delay_ms(250);
+		}
 	}
 	return 0;
 }
