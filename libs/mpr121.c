@@ -118,11 +118,11 @@ void mpr121_reset(void){
   
 	mpr121_write(USL, 156);
 	mpr121_write(TL, 140); 				// ~562 ADC
-	mpr121_write(LSL, 101);
+	mpr121_write(LSL, 130);
   
 	// impostazione preliminare delle soglie
 	for (uint8_t i=0; i<12; i++) {
-		mpr121_write(E0TTH + 2*i, 150);
+		mpr121_write(E0TTH + 2*i, 4);
 		mpr121_write(E0RTH + 2*i, 50);
   	}
 	_delay_us(500);
