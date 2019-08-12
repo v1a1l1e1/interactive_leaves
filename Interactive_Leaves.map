@@ -49,6 +49,8 @@ Discarded input sections
  .text          0x0000000000000000        0x0 libs/mpr121.o
  .data          0x0000000000000000        0x0 libs/mpr121.o
  .bss           0x0000000000000000        0x0 libs/mpr121.o
+ .text.mpr121_read2
+                0x0000000000000000       0x60 libs/mpr121.o
  .text.mpr121_read_status
                 0x0000000000000000       0x24 libs/mpr121.o
  .text.format_status
@@ -278,7 +280,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000      0x492
+.text           0x0000000000000000      0x454
  *(.vectors)
  .vectors       0x0000000000000000       0x68 /usr/lib/gcc/avr/4.9.2/../../../avr/lib/avr5/crtatmega168.o
                 0x0000000000000000                __vectors
@@ -365,75 +367,75 @@ END GROUP
                 0x00000000000000cc        0xc test.o
                 0x00000000000000cc                init_interrupt
  .text.startup.main
-                0x00000000000000d8       0x6e test.o
+                0x00000000000000d8       0x68 test.o
                 0x00000000000000d8                main
  .text.mpr121_read
-                0x0000000000000146       0x40 libs/mpr121.o
-                0x0000000000000146                mpr121_read
- .text.mpr121_read2
-                0x0000000000000186       0x60 libs/mpr121.o
-                0x0000000000000186                mpr121_read2
+                0x0000000000000140       0x40 libs/mpr121.o
+                0x0000000000000140                mpr121_read
  .text.mpr121_write
-                0x00000000000001e6       0x34 libs/mpr121.o
-                0x00000000000001e6                mpr121_write
+                0x0000000000000180       0x34 libs/mpr121.o
+                0x0000000000000180                mpr121_write
  .text.mpr121_nirq
-                0x000000000000021a       0x18 libs/mpr121.o
-                0x000000000000021a                mpr121_nirq
+                0x00000000000001b4       0x18 libs/mpr121.o
+                0x00000000000001b4                mpr121_nirq
  .text.mpr121_stopMode
-                0x0000000000000232        0x8 libs/mpr121.o
-                0x0000000000000232                mpr121_stopMode
+                0x00000000000001cc        0x8 libs/mpr121.o
+                0x00000000000001cc                mpr121_stopMode
  .text.mpr121_runMode
-                0x000000000000023a        0x8 libs/mpr121.o
-                0x000000000000023a                mpr121_runMode
+                0x00000000000001d4        0x8 libs/mpr121.o
+                0x00000000000001d4                mpr121_runMode
  .text.mpr121_reset
-                0x0000000000000242       0xd6 libs/mpr121.o
-                0x0000000000000242                mpr121_reset
+                0x00000000000001dc       0xd6 libs/mpr121.o
+                0x00000000000001dc                mpr121_reset
  .text.mpr121_init
-                0x0000000000000318       0x18 libs/mpr121.o
-                0x0000000000000318                mpr121_init
- .text.mpr121_filteredData
-                0x0000000000000330       0x18 libs/mpr121.o
-                0x0000000000000330                mpr121_filteredData
+                0x00000000000002b2       0x18 libs/mpr121.o
+                0x00000000000002b2                mpr121_init
+ .text.mpr121_filteredDataL
+                0x00000000000002ca       0x16 libs/mpr121.o
+                0x00000000000002ca                mpr121_filteredDataL
+ .text.mpr121_filteredDataH
+                0x00000000000002e0       0x10 libs/mpr121.o
+                0x00000000000002e0                mpr121_filteredDataH
  .text.mpr121_baselineData
-                0x0000000000000348       0x1a libs/mpr121.o
-                0x0000000000000348                mpr121_baselineData
+                0x00000000000002f0       0x14 libs/mpr121.o
+                0x00000000000002f0                mpr121_baselineData
  .text.send_info
-                0x0000000000000362       0x26 libs/mpr121.o
-                0x0000000000000362                send_info
+                0x0000000000000304       0x46 libs/mpr121.o
+                0x0000000000000304                send_info
  .text.i2c_init
-                0x0000000000000388       0x1a libs/i2c.o
-                0x0000000000000388                i2c_init
+                0x000000000000034a       0x1a libs/i2c.o
+                0x000000000000034a                i2c_init
  .text.i2c_start
-                0x00000000000003a2       0x22 libs/i2c.o
-                0x00000000000003a2                i2c_start
+                0x0000000000000364       0x22 libs/i2c.o
+                0x0000000000000364                i2c_start
  .text.i2c_restart
-                0x00000000000003c4       0x1a libs/i2c.o
-                0x00000000000003c4                i2c_restart
+                0x0000000000000386       0x1a libs/i2c.o
+                0x0000000000000386                i2c_restart
  .text.i2c_stop
-                0x00000000000003de       0x10 libs/i2c.o
-                0x00000000000003de                i2c_stop
+                0x00000000000003a0       0x10 libs/i2c.o
+                0x00000000000003a0                i2c_stop
  .text.i2c_address
-                0x00000000000003ee       0x1e libs/i2c.o
-                0x00000000000003ee                i2c_address
+                0x00000000000003b0       0x1e libs/i2c.o
+                0x00000000000003b0                i2c_address
  .text.i2c_tx_data
-                0x000000000000040c       0x1a libs/i2c.o
-                0x000000000000040c                i2c_tx_data
+                0x00000000000003ce       0x1a libs/i2c.o
+                0x00000000000003ce                i2c_tx_data
  .text.i2c_rx_data
-                0x0000000000000426       0x28 libs/i2c.o
-                0x0000000000000426                i2c_rx_data
+                0x00000000000003e8       0x28 libs/i2c.o
+                0x00000000000003e8                i2c_rx_data
  .text.init_usart
-                0x000000000000044e       0x22 libs/usart.o
-                0x000000000000044e                init_usart
+                0x0000000000000410       0x22 libs/usart.o
+                0x0000000000000410                init_usart
  .text.transmit_byte
-                0x0000000000000470        0xe libs/usart.o
-                0x0000000000000470                transmit_byte
- .text.flush    0x000000000000047e       0x10 libs/usart.o
-                0x000000000000047e                flush
-                0x000000000000048e                . = ALIGN (0x2)
+                0x0000000000000432        0xe libs/usart.o
+                0x0000000000000432                transmit_byte
+ .text.flush    0x0000000000000440       0x10 libs/usart.o
+                0x0000000000000440                flush
+                0x0000000000000450                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000000000048e        0x0 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_exit.o)
-                0x000000000000048e                exit
-                0x000000000000048e                _exit
+ .fini9         0x0000000000000450        0x0 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_exit.o)
+                0x0000000000000450                exit
+                0x0000000000000450                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -452,11 +454,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000000000048e        0x4 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_exit.o)
+ .fini0         0x0000000000000450        0x4 /usr/lib/gcc/avr/4.9.2/avr5/libgcc.a(_exit.o)
  *(.fini0)
-                0x0000000000000492                _etext = .
+                0x0000000000000454                _etext = .
 
-.data           0x0000000000800100        0x0 load address 0x0000000000000492
+.data           0x0000000000800100        0x0 load address 0x0000000000000454
                 0x0000000000800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -473,8 +475,8 @@ END GROUP
  *(.bss*)
  *(COMMON)
                 0x0000000000800100                PROVIDE (__bss_end, .)
-                0x0000000000000492                __data_load_start = LOADADDR (.data)
-                0x0000000000000492                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000000000000454                __data_load_start = LOADADDR (.data)
+                0x0000000000000454                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x0000000000800060        0x0
                 0x0000000000800060                PROVIDE (__noinit_start, .)
@@ -502,19 +504,19 @@ END GROUP
 .user_signatures
  *(.user_signatures*)
 
-.stab           0x0000000000000000     0x1bc0
+.stab           0x0000000000000000     0x1b90
  *(.stab)
  .stab          0x0000000000000000      0x690 test.o
- .stab          0x0000000000000690      0xa5c libs/mpr121.o
-                                       0x15e4 (size before relaxing)
- .stab          0x00000000000010ec      0x654 libs/i2c.o
+ .stab          0x0000000000000690      0xa2c libs/mpr121.o
+                                       0x1680 (size before relaxing)
+ .stab          0x00000000000010bc      0x654 libs/i2c.o
                                         0x81c (size before relaxing)
- .stab          0x0000000000001740      0x480 libs/usart.o
+ .stab          0x0000000000001710      0x480 libs/usart.o
                                         0xb88 (size before relaxing)
 
-.stabstr        0x0000000000000000     0x142a
+.stabstr        0x0000000000000000     0x1447
  *(.stabstr)
- .stabstr       0x0000000000000000     0x142a test.o
+ .stabstr       0x0000000000000000     0x1447 test.o
 
 .stab.excl
  *(.stab.excl)

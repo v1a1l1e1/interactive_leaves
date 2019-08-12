@@ -47,7 +47,7 @@ void setup()
   size(1000, 512);  
   W = width/N;
   hGraph = height / 2;
-  frameRate(30);
+  frameRate(60);
   smooth();
   
   s_port = new Serial(this, "/dev/ttyUSB0", 9600);
@@ -97,7 +97,6 @@ void update() {
 void serialEvent(Serial s)
 {
   int addr = s.read();// - 128;
-  println(addr);
   switch( addr ) {
     case ADDR_BASE0:
       vBase0 = s.read();
@@ -108,10 +107,11 @@ void serialEvent(Serial s)
       else
         vFilt0 += ( s.read() << 8);
       filtered_lsb = !filtered_lsb;
-      break;}
+      break;
     case ADDR_TOUCH0:
-      if( s.read() == 1)
+      if( (s.read() & (0x01))== 1){
         bTouch0 = true;
+      }
       else
         bTouch0 = false;
       update();
@@ -119,6 +119,7 @@ void serialEvent(Serial s)
       int v = s.read();
       break;
   
+  }
 }
 
 void keyPressed()

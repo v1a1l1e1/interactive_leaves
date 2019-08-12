@@ -33,7 +33,7 @@ int main(void){
 	if (mpr121_init()){
 //		print_string("\r\nMPR121: init() OK\r\n");
 		while(1){
-			_delay_ms(125);
+			_delay_ms(2);
 			send_info(0);
 
 

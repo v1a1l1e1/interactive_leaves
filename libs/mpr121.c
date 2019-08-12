@@ -284,12 +284,16 @@ void mpr121_set_threshold(uint8_t ele, uint8_t touch, uint8_t release) {
 	mpr121_runMode();  
 }
 
-uint16_t  mpr121_filteredData(uint8_t ele) {
+uint8_t  mpr121_filteredDataL(uint8_t ele) {
   if (ele > 12) return 0;
-  return (mpr121_read2(E0_DATA_LB + ele*2, E0_DATA_HB + ele*2));
+  return (mpr121_read(E0_DATA_LB + ele*22));
 }
 
-uint16_t  mpr121_baselineData(uint8_t ele) {
+uint8_t  mpr121_filteredDataH(uint8_t ele) {
+  if (ele > 12) return 0;
+  return (mpr121_read(E0_DATA_HB + ele*2));
+}
+uint8_t  mpr121_baselineData(uint8_t ele) {
   if (ele > 12) return 0;
   return (mpr121_read(E0BV + ele) << 2);
 }
@@ -301,7 +305,9 @@ void send_info(uint8_t n_ele){
 	transmit_byte(20);
 	transmit_byte(mpr121_baselineData(n_ele));
 	transmit_byte(21);
-	transmit_byte(mpr121_filteredData(n_ele));
-//	transmit_byte(22);
-//	transmit_word(mpr121_touch(add));
+	transmit_byte(mpr121_filteredDataL(n_ele));
+	transmit_byte(21);
+	transmit_byte(mpr121_filteredDataH(n_ele));
+	transmit_byte(22);
+	transmit_byte(mpr121_read(TOUCH_STATUS0));
 }

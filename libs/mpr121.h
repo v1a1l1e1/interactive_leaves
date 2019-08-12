@@ -202,8 +202,9 @@ void mpr121_touch812(void);
 uint8_t check_bit(uint8_t byte, uint8_t bit);
 uint16_t mpr121_read_status(void);
 void format_status(uint16_t s);
-uint16_t mpr121_filteredData(uint8_t t);
-uint16_t mpr121_baselineData(uint8_t t);
+uint8_t mpr121_filteredDataL(uint8_t t); 
+uint8_t mpr121_filteredDataH(uint8_t t);
+uint8_t mpr121_baselineData(uint8_t t);
 
 void mpr121_set_CDC(uint8_t cdc);
 void mpr121_set_CDT(uint8_t cdt);  
