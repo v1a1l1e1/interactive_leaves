@@ -8,10 +8,10 @@ uint8_t mpr121_init(void){
 #endif
 	i2c_init();
 	mpr121_write(SRST,0x63);
-	uint8_t t= mpr121_read(CDT_GLOBAL);
-	print_string("\r\nCDT = ");	
-	print_byte(t);
-	print_string("\r\n");
+//	uint8_t t= mpr121_read(CDT_GLOBAL);
+//	print_string("\r\nCDT = ");	
+//	print_byte(t);
+//	print_string("\r\n");
 	mpr121_reset();
 	return 1;
 }
@@ -297,11 +297,11 @@ uint16_t  mpr121_baselineData(uint8_t ele) {
 
 /* CONFIGURAZIONE PROCESSING*/
 
-void send_info(uint8_t add){
+void send_info(uint8_t n_ele){
 	transmit_byte(20);
-	transmit_word(mpr121_baselineData(add));
+	transmit_byte(mpr121_baselineData(n_ele));
 	transmit_byte(21);
-	transmit_byte(mpr121_filteredData(add));
+	transmit_byte(mpr121_filteredData(n_ele));
 //	transmit_byte(22);
-//	transmit_byte(mpr121_touch(add));
+//	transmit_word(mpr121_touch(add));
 }
