@@ -19,9 +19,9 @@ int baseline1[];
 int filtered1[];
 int current;
 
-int USL = 626; //156B
-int LSL = 405; //101B
-int TAR = 562; //140B
+int USL = 626; //156
+int LSL = 561; //140
+int TAR = 521; //130
 
 int vBase0 = -1;
 int vFilt0 = -1;
